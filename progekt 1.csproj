@@ -1,11 +1,43 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿internal class Program
+    {
+        static double Quartile(int[] Numbers, int num)
+        {
+            Array.Sort(Numbers);
+            double rank = num * (Numbers.Length + 1) / 4.0;
+            int rank_integar = Convert.ToInt32(rank);
+            double Quartile = 0;
+            if (rank_integar == rank)
+                Quartile = Numbers[rank_integar - 1];
+            else
+                Quartile = Numbers[rank_integar - 1] + (Numbers[rank_integar] - Numbers[rank_integar - 1]) * (rank - rank_integar);
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net10.0</TargetFramework>
-    <RootNamespace>progekt_1</RootNamespace>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+            return Quartile;
+        }
+        static void Outlier_Or_Not(int[] Numbers)
+        {
+            double Q1 = Quartile(Numbers, 1);
+            double Q3 = Quartile(Numbers, 3);
+            double IQR = (Q3 - Q1);
+            double Lower_Bound = Q1 - (1.5 * IQR);
+            double Upper_Bound = Q3 + (1.5 * IQR);
+            for (int i = 0; i < Numbers.Length; i++)
+            {
+                if (Numbers[i] < Lower_Bound || Numbers[i] > Upper_Bound)
+                    Console.WriteLine($"{Numbers[i]} is Outlier");
+                else
+                    Console.WriteLine($"{Numbers[i]} is not Outlier");
+            }
+        }
 
-</Project>
+        static void Main(string[] args)
+        {
+            int[] Numbers = new int[]
+            {
+                115, 182, 191, 31, 196,1099,
+                5, 172, 10, 179, 83, 21,20,
+                21, 186, 177, 195, 193, 188,
+                199, 62, 109, 105, 183, 110
+            };
+            Outlier_Or_Not(Numbers);
+        }
+    }
